@@ -1,5 +1,6 @@
 package com.example.maqui.bancodedadossqlite.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
+import com.example.maqui.bancodedadossqlite.Helper.DbHelper;
+import com.example.maqui.bancodedadossqlite.Helper.TarefaDAO;
 import com.example.maqui.bancodedadossqlite.R;
 import com.example.maqui.bancodedadossqlite.Helper.RecyclerItemClickListener;
 import com.example.maqui.bancodedadossqlite.adapter.TarefaAdapter;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView = findViewById( R.id.recyclerView );
+
 
         //adicionar evento de clique
         recyclerView.addOnItemTouchListener( new RecyclerItemClickListener( getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -66,16 +70,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void carregarListaTarefaas(){
 
-        //listar tarefas
-        Tarefa tarefa= new Tarefa();
-        tarefa.setNomeTarefa( "Ir ao mercado" );
-        tarefaList.add(tarefa);
-
-        Tarefa tarefa1= new Tarefa();
-        tarefa1.setNomeTarefa( "Ir a feira" );
-        tarefaList.add(tarefa1);
+        //listar tarefas estáticas
+//        Tarefa tarefa= new Tarefa();
+//        tarefa.setNomeTarefa( "Ir ao mercado" );
+//        tarefaList.add(tarefa);
+//
+//        Tarefa tarefa1= new Tarefa();
+//        tarefa1.setNomeTarefa( "Ir a feira" );
+//        tarefaList.add(tarefa1);
 
         //configurar um adapter
+
+        TarefaDAO tarefaDAO= new TarefaDAO( MainActivity.this );
+        tarefaList= tarefaDAO.listar();
         tarefaAdapter= new TarefaAdapter(tarefaList);
 
         //configurar recyclerview
