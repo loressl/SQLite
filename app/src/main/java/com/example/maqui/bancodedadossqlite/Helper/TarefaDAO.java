@@ -43,12 +43,36 @@ public class TarefaDAO implements ITarefaDAO{
 
     @Override
     public boolean atualizar(Tarefa tarefa) {
-        return false;
+
+        ContentValues cv= new ContentValues(  );
+        cv.put("nome",tarefa.getNomeTarefa());
+
+        try{
+            String[] args={tarefa.getId().toString()};//se tivesse alguma condição como id=? AND status =? ... ai no args poderia colcoar {"5", "E"}, coloca os paradmetros q será usado
+            escreve.update( DbHelper.TABELA_TAREFAS,cv,"id=?", args );//coloca ?  pois n sabe qual exatamente será, então o valor ao lado dirá, ai terá q instanciar um array de string
+
+            Log.e("INFO", "Tarefa atualizada com sucesso");
+        }catch (Exception e){
+            Log.e("INFO", "Erro ao atualizadar tarefa" + e.getMessage());
+            return false;
+        }
+
+        return true;
+
     }
 
     @Override
     public boolean deletar(Tarefa tarefa) {
-        return false;
+
+        try{
+            String[] args={tarefa.getId().toString()};
+            escreve.delete( DbHelper.TABELA_TAREFAS,"id=?", args);
+            Log.e("INFO", "Tarefa removida com sucesso");
+        }catch (Exception e){
+            Log.e("INFO", "Erro ao remover tarefa" + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override

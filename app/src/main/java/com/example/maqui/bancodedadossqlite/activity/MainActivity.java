@@ -1,9 +1,11 @@
 package com.example.maqui.bancodedadossqlite.activity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.maqui.bancodedadossqlite.Helper.DbHelper;
 import com.example.maqui.bancodedadossqlite.Helper.TarefaDAO;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TarefaAdapter tarefaAdapter;
     private List<Tarefa> tarefaList= new ArrayList<>( );
+    private Tarefa tarefaSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {//é chamado apenas a primeira vez que é carregado a interface
@@ -45,12 +49,49 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener( new RecyclerItemClickListener( getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("clique","onItemClick");
+                //Recuperar tarefa para edição
+                Tarefa tarefaSelecionada= tarefaList.get( position );
+
+                //enviar tarefa para tela adicionar tarefa
+                Intent intent= new Intent( MainActivity.this, AdicionarTarefas.class );
+                intent.putExtra( "tarefaSelecionada", tarefaSelecionada );
+
+                startActivity( intent );
+
             }
 
             @Override
             public void onLongItemClick(View view, int position) {
-                Log.i("clique","onLongItemClick");
+
+                //recuperar tarefa selecionada
+                tarefaSelecionada= tarefaList.get( position );
+
+                AlertDialog.Builder dialog= new AlertDialog.Builder( MainActivity.this );
+
+                //configura o título e mensagem
+                dialog.setTitle( "Confirmar exclusão" );
+                dialog.setMessage( "Deseja excluir a tarefa " + tarefaSelecionada.getNomeTarefa() + "?" );
+
+                dialog.setPositiveButton( "Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        TarefaDAO tarefaDAO= new TarefaDAO( getApplicationContext() );
+
+                        if(tarefaDAO.deletar( tarefaSelecionada )){
+                            carregarListaTarefaas();
+                            Toast.makeText( getApplicationContext(),"Sucesso ao excluir tarefa!", Toast.LENGTH_SHORT ).show();
+                        }else{
+                            Toast.makeText( getApplicationContext(),"Erro ao excluir tarefa!", Toast.LENGTH_SHORT ).show();
+                        }
+
+                    }
+                } );
+
+                dialog.setNegativeButton( "Não",null);//n terá evento
+
+                //exibit dialog
+                dialog.create();
+                dialog.show();
             }
 
             @Override
