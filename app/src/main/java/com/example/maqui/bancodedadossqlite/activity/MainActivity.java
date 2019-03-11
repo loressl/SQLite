@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener( new RecyclerItemClickListener( getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
                 //Recuperar tarefa para edição
                 Tarefa tarefaSelecionada= tarefaList.get( position );
 

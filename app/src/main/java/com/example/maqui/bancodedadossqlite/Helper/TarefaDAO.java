@@ -30,7 +30,6 @@ public class TarefaDAO implements ITarefaDAO{
         cv.put( "nome", tarefa.getNomeTarefa() );
 
         try{
-
             escreve.insert(DbHelper.TABELA_TAREFAS, null,cv);
             Log.e("INFO", "Tarefa salva com sucesso");
         }catch (Exception e){
