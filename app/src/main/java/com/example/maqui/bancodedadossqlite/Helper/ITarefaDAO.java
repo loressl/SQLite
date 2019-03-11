@@ -9,5 +9,5 @@ public interface ITarefaDAO {
     boolean salvar(Tarefa tarefa);
     boolean atualizar(Tarefa tarefa);
     boolean deletar(Tarefa tarefa);
-    public List<Tarefa> listar();
+    List<Tarefa> listar();
 }
